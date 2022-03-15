@@ -2,6 +2,7 @@ import React from 'react'
 import ReactDOM from 'react-dom'
 import './index.css'
 import App from './App'
+import ShowAge from './components/ShowAge'
 
 // Sử dụng object
 const person = {
@@ -18,7 +19,7 @@ const showAge = (age) => <p>Tuoi cua ban la: {age}</p>
 
 // Sử dụng component trong react
 
-const ShowAge = props => <p>Tuoi cua ban la: {props.age}</p> // { age: 20 }
+
 
 ReactDOM.render(<div>
     <p>Ten: {person.name} </p>
