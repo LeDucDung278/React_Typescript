@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 // import logo from './logo.svg'
 import './App.css'
 import Showinfo from './components/Showinfo'
@@ -10,13 +10,28 @@ import AboutPage from './pages/AboutPage'
 import WebsiteLayout from './pages/layouts/WebsiteLayout'
 import AdminLayout from './pages/layouts/AdminLayout'
 import Dashboard from './pages/Dashboard'
+import ProductAdd from './pages/ProductAdd'
+import { add, list } from './api/product'
 
 function App() {
-  const [count, setCount] = useState(0)
-  const [info, setInfo] = useState<Product>({
-    name: "Dũng",
-    age : 20
-  })
+  
+  const [products, setProducts] = useState<{_id:Number, name: String}[]>([])
+    useEffect(() =>{
+      const getProducts = async () => {
+        const { data } = await list();
+        setProducts(data)
+      }
+      getProducts()
+    },[])
+
+    const onHandleAdd = async (product:any) => {
+      console.log('app.s', product)
+
+      const {data} = await add(product)
+
+      setProducts([...products, data])
+    }
+
 
 
   return (
@@ -38,6 +53,7 @@ function App() {
           <Route path='/' element={<WebsiteLayout/>}>
             <Route index element={<HomePage/>}/>
             <Route path='product' element={<ProductPage/>} />
+            <Route path='product/add' element={<ProductAdd name="Dũng" onAdd={onHandleAdd}/>} />
           </Route>
           <Route path='admin' element={<AdminLayout/>}>
             <Route index element={<Navigate to ='/admin/dashboard'/>}/>
