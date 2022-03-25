@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 // import logo from './logo.svg'
 import './App.css'
 import Showinfo from './components/Showinfo'
-import type { Product } from './types/product'
+import type { ProductType } from './types/product'
 import { Route ,NavLink, Routes, Navigate } from 'react-router-dom'
 import HomePage from './pages/HomePage'
 import ProductPage from './pages/ProductPage'
@@ -11,11 +11,13 @@ import WebsiteLayout from './pages/layouts/WebsiteLayout'
 import AdminLayout from './pages/layouts/AdminLayout'
 import Dashboard from './pages/Dashboard'
 import ProductAdd from './pages/ProductAdd'
-import { add, list } from './api/product'
+import { add, list, remove, update } from './api/product'
+import ProductManager from './pages/ProductManager'
+import ProductEdit from './pages/ProductEdit'
 
 function App() {
   
-  const [products, setProducts] = useState<{_id:Number, name: String}[]>([])
+  const [products, setProducts] = useState<ProductType[]>([])
     useEffect(() =>{
       const getProducts = async () => {
         const { data } = await list();
@@ -30,6 +32,20 @@ function App() {
       const {data} = await add(product)
 
       setProducts([...products, data])
+    }
+
+    const onHandleRemove = async (id: number) => {
+      remove(id)
+      setProducts(products.filter(item => item.id !== id))
+    }
+
+    const onHandleUpdate = async (product: ProductType) => {
+      try {
+        const {data} = await update(product);
+        setProducts(products.map(item => item.id ===data.id ? product : item))
+      } catch (error) {
+        
+      }
     }
 
 
@@ -53,11 +69,16 @@ function App() {
           <Route path='/' element={<WebsiteLayout/>}>
             <Route index element={<HomePage/>}/>
             <Route path='product' element={<ProductPage/>} />
-            <Route path='product/add' element={<ProductAdd name="Dũng" onAdd={onHandleAdd}/>} />
+            
           </Route>
           <Route path='admin' element={<AdminLayout/>}>
             <Route index element={<Navigate to ='/admin/dashboard'/>}/>
             <Route path='dashboard' element={<Dashboard/>}/>
+            <Route path='product'>
+              <Route index element={<ProductManager products={products} onRemove={onHandleRemove}/>}/>
+              <Route path=':id/edit' element={<ProductEdit onUpdate={onHandleUpdate}/> } />
+              <Route path='add' element={<ProductAdd onAdd={onHandleAdd}/>} />
+            </Route>
           </Route>
         </Routes>
       </main>

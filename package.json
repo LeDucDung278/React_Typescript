@@ -3,6 +3,7 @@
   "private": true,
   "version": "0.0.0",
   "scripts": {
+    "start:server": "json-server --watch db.json --port 3001",
     "dev": "vite",
     "build": "tsc && vite build",
     "preview": "vite preview"
@@ -11,6 +12,7 @@
     "axios": "^0.26.1",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
+    "react-hook-form": "^7.28.1",
     "react-router-dom": "^6.2.2"
   },
   "devDependencies": {
