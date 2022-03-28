@@ -20,5 +20,13 @@
       "price": "111111",
       "id": 4
     }
+  ],
+  "users": [
+    {
+      "name": "admin",
+      "email": "admin@gmail.com",
+      "password": "123456789",
+      "id": 1
+    }
   ]
 }

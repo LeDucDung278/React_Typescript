@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react'
 import './App.css'
 import Showinfo from './components/Showinfo'
 import type { ProductType } from './types/product'
+import type { UserType } from './types/user'
 import { Route ,NavLink, Routes, Navigate } from 'react-router-dom'
 import HomePage from './pages/HomePage'
 import ProductPage from './pages/ProductPage'
@@ -14,6 +15,9 @@ import ProductAdd from './pages/ProductAdd'
 import { add, list, remove, update } from './api/product'
 import ProductManager from './pages/ProductManager'
 import ProductEdit from './pages/ProductEdit'
+import PrivateRouter from './components/PrivateRouter'
+import SignUp from './pages/SignUp'
+import SignIn from './pages/SignIn'
 
 function App() {
   
@@ -48,6 +52,15 @@ function App() {
       }
     }
 
+    const [users, setUsers] = useState<UserType[]>([])
+    useEffect(() =>{
+      const getUsers = async () => {
+        const { data } = await list();
+        setUsers(data)
+      }
+      getUsers()
+    },[])
+
 
 
   return (
@@ -69,9 +82,8 @@ function App() {
           <Route path='/' element={<WebsiteLayout/>}>
             <Route index element={<HomePage/>}/>
             <Route path='product' element={<ProductPage/>} />
-            
           </Route>
-          <Route path='admin' element={<AdminLayout/>}>
+          <Route path='admin' element={<PrivateRouter><AdminLayout/></PrivateRouter>}>
             <Route index element={<Navigate to ='/admin/dashboard'/>}/>
             <Route path='dashboard' element={<Dashboard/>}/>
             <Route path='product'>
@@ -80,6 +92,8 @@ function App() {
               <Route path='add' element={<ProductAdd onAdd={onHandleAdd}/>} />
             </Route>
           </Route>
+          <Route path='/signup' element= {<SignUp/>} />
+          <Route path='/signin' element= {<SignIn/>}/>
         </Routes>
       </main>
     </div>

@@ -1,8 +1,8 @@
 import React from 'react'
-import { Product } from '../types/product'
+// import { Product } from '../types/product'
 
 type ShowinfoProps = {
-    person: Product
+    // person: Product
 }
 
 const Showinfo = (props: ShowinfoProps) => {
